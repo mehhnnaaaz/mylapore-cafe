@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mylapore Cafe — Oshawa</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Pure vegetarian South Indian food from the temple town of Mylapore, cooked fresh in Oshawa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Instrument+Sans:wght@400;500;600&family=Noto+Serif+Tamil:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#120c07;
+  --ink-2:#1c140c;
+  --brass:#c9973f;
+  --gold:#e5b45a;
+  --gold-soft:#f3d9a0;
+  --cream:#f6eddc;
+  --paper:#efe4cc;
+  --leaf:#24402a;
+  --leaf-dk:#132619;
+  --kumkum:#a3301f;
+  --muted:#b5a387;
+  --serif:"Fraunces", Georgia, serif;
+  --sans:"Instrument Sans", system-ui, sans-serif;
+  --tamil:"Noto Serif Tamil", serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--cream);font-family:var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+::selection{background:var(--gold);color:var(--ink)}
+
+body::after{content:"";position:fixed;inset:-50%;pointer-events:none;z-index:90;opacity:.06;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1.2s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}100%{transform:translate(0,0)}}
+
+/* preloader */
+#loader{position:fixed;inset:0;z-index:100;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .9s ease, visibility .9s}
+#loader.done{opacity:0;visibility:hidden}
+#loader img{width:min(320px,70vw);mix-blend-mode:lighten}
+#loader .pct{font-family:var(--serif);font-size:15px;letter-spacing:.3em;color:var(--gold)}
+#loader .bar{width:min(220px,50vw);height:1px;background:rgba(246,237,220,.15);overflow:hidden}
+#loader .bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .2s}
+
+.cursor{position:fixed;left:0;top:0;width:10px;height:10px;border-radius:50%;background:var(--gold);pointer-events:none;z-index:95;transition:width .25s,height .25s,background .25s;mix-blend-mode:difference}
+.cursor.big{width:56px;height:56px;background:var(--cream)}
+.cursor.drag{width:84px;height:84px;background:var(--cream)}
+.cursor span{position:absolute;inset:0;display:grid;place-items:center;font-size:11px;letter-spacing:.2em;color:#000;opacity:0;transition:opacity .2s}
+.cursor.drag span{opacity:1}
+@media (hover:none){.cursor{display:none}}
+
+nav.top{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:80;width:min(1180px,calc(100% - 32px));display:flex;align-items:center;justify-content:space-between;padding:8px 10px 8px 16px;border-radius:999px;
+  background:rgba(8,5,3,.72);backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);border:1px solid rgba(246,237,220,.1)}
+.logo img{height:34px;width:auto;mix-blend-mode:lighten}
+nav.top ul{display:flex;gap:28px;list-style:none;font-size:14px;color:rgba(246,237,220,.75)}
+nav.top ul a:hover{color:var(--gold)}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;background:var(--gold);color:var(--ink);font-weight:600;font-size:14px;transition:transform .3s var(--ease), background .3s}
+.pill:hover{transform:translateY(-2px);background:var(--gold-soft)}
+.pill.ghost{background:transparent;color:var(--cream);border:1px solid rgba(246,237,220,.3)}
+.pill.ghost:hover{background:rgba(246,237,220,.08)}
+@media (max-width:860px){nav.top ul{display:none}}
+
+/* ============ HERO JOURNEY ============ */
+#journey{position:relative;height:640vh}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:#000}
+.shot{position:absolute;inset:0;opacity:0;will-change:transform,opacity}
+.shot img{width:100%;height:100%;object-fit:cover}
+.shot.arch{opacity:1;z-index:3}
+.shade,.hero-title,.scroll-hint,.chapter,.counter,.rail{z-index:5}
+.shade{position:absolute;inset:0;pointer-events:none;background:
+  linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,0) 25%,rgba(0,0,0,0) 50%,rgba(0,0,0,.75) 100%),
+  radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.5) 100%)}
+.hero-title{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none;padding:0 16px}
+.hero-title .eyebrow{font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:22px;text-shadow:0 2px 20px rgba(0,0,0,.6)}
+.hero-title h1{font-family:var(--serif);font-weight:300;font-size:clamp(70px,16vw,250px);line-height:.82;letter-spacing:-.04em;font-variation-settings:"opsz" 144;text-shadow:0 10px 60px rgba(0,0,0,.45)}
+.hero-title .tag{font-family:var(--serif);font-style:italic;font-size:clamp(24px,3vw,42px);color:var(--gold-soft);margin-top:14px}
+.hero-title .ta{font-family:var(--tamil);font-size:clamp(16px,1.6vw,20px);color:rgba(246,237,220,.8);margin-top:12px}
+.scroll-hint{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(246,237,220,.75);display:flex;flex-direction:column;align-items:center;gap:10px}
+.scroll-hint i{width:1px;height:46px;background:linear-gradient(var(--gold),transparent);animation:drip 1.8s ease-in-out infinite;transform-origin:top}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+
+.chapter{position:absolute;left:clamp(16px,6vw,96px);bottom:clamp(70px,12vh,130px);max-width:min(620px,calc(100% - 32px));opacity:0;pointer-events:none}
+.chapter .k{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;gap:12px;align-items:center}
+.chapter .k::before{content:"";width:34px;height:1px;background:var(--gold)}
+.chapter h2{font-family:var(--serif);font-weight:300;font-size:clamp(44px,7vw,108px);line-height:.92;letter-spacing:-.025em;font-variation-settings:"opsz" 144;text-shadow:0 6px 40px rgba(0,0,0,.5)}
+.chapter h2 em{font-style:italic;color:var(--gold-soft)}
+.chapter p{margin-top:18px;font-size:clamp(15px,1.3vw,18px);line-height:1.55;color:rgba(246,237,220,.88);max-width:440px;text-shadow:0 2px 16px rgba(0,0,0,.6)}
+.counter{position:absolute;right:clamp(16px,5vw,80px);bottom:clamp(70px,12vh,130px);text-align:right;pointer-events:none;opacity:0}
+.counter .big{font-family:var(--serif);font-weight:300;font-size:clamp(56px,9vw,150px);line-height:.9;color:transparent;-webkit-text-stroke:1px rgba(243,217,160,.7);font-variant-numeric:tabular-nums}
+.counter .lbl{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-soft);margin-top:8px}
+.rail{position:absolute;left:50%;transform:translateX(-50%);bottom:28px;display:flex;gap:8px;opacity:0}
+.rail b{display:block;width:44px;height:2px;background:rgba(246,237,220,.25);overflow:hidden}
+.rail b i{display:block;height:100%;background:var(--gold);transform:scaleX(0);transform-origin:left}
+@media (max-width:860px){.counter{top:90px;bottom:auto}.counter .big{font-size:52px}.rail b{width:28px}}
+
+/* marquee */
+.marquee{background:var(--gold);color:var(--ink);overflow:hidden;padding:18px 0}
+.marquee .track{display:flex;width:max-content;animation:mq 36s linear infinite}
+.marquee span{font-family:var(--serif);font-size:clamp(24px,3.2vw,44px);padding-right:38px;white-space:nowrap;letter-spacing:.02em}
+.marquee span:nth-child(even){font-style:italic}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+section.s{position:relative;padding:clamp(90px,13vw,170px) clamp(16px,6vw,96px)}
+.wrap{max-width:1240px;margin:0 auto}
+.label{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);display:flex;gap:12px;align-items:center;margin-bottom:28px}
+.label::before{content:"";width:34px;height:1px;background:currentColor}
+.h-xl{font-family:var(--serif);font-weight:300;font-size:clamp(44px,6.8vw,104px);line-height:.95;letter-spacing:-.025em;font-variation-settings:"opsz" 144}
+.h-xl em{font-style:italic;color:var(--gold-soft)}
+
+.rv{opacity:0;transform:translateY(40px);transition:opacity 1s var(--ease), transform 1s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.split .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.06em}
+.split .w>span{display:inline-block;transform:translateY(110%);transition:transform 1s var(--ease)}
+.split.in .w>span{transform:none}
+
+/* story */
+#story{background:var(--paper);color:var(--ink)}
+#story .label{color:var(--kumkum)}
+#story .h-xl em{color:var(--kumkum)}
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,100px);align-items:center}
+.story-img{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:240px 240px 6px 6px}
+.story-img img{width:100%;height:120%;object-fit:cover;will-change:transform}
+.story-copy .lead{font-family:var(--serif);font-style:italic;font-size:clamp(22px,2.2vw,30px);line-height:1.35;color:#3c2a1a;margin:26px 0}
+.story-copy p{font-size:clamp(16px,1.25vw,18px);line-height:1.65;color:#4f3c2b}
+.story-copy p+p{margin-top:16px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:clamp(60px,8vw,100px);border-top:1px solid rgba(18,12,7,.15)}
+.stat{padding:28px 20px 0 0}
+.stat+.stat{padding-left:20px;border-left:1px solid rgba(18,12,7,.15)}
+.stat .n{font-family:var(--serif);font-weight:300;font-size:clamp(44px,5.6vw,86px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat .n small{font-size:.4em;color:var(--kumkum);margin-left:4px}
+.stat .t{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#7a6650;margin-top:10px}
+@media (max-width:860px){.story-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.stat+.stat{border-left:0;border-top:1px solid rgba(18,12,7,.15);padding-left:0;padding-top:22px}.stat{padding-bottom:22px}}
+
+/* horizontal menu */
+#discover{position:relative;height:340vh;background:var(--ink)}
+#discover .pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+.disc-head{padding:0 clamp(16px,6vw,96px);display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:clamp(24px,4vh,48px)}
+.disc-head p{max-width:320px;color:var(--muted);font-size:15px;line-height:1.5}
+.htrack{display:flex;gap:clamp(16px,2.5vw,36px);padding:0 clamp(16px,6vw,96px);will-change:transform}
+.mcard{flex:0 0 min(78vw,820px);height:min(62vh,560px);position:relative;border-radius:22px;overflow:hidden;display:grid;grid-template-columns:1.1fr 1fr;background:var(--ink-2);border:1px solid rgba(246,237,220,.08)}
+.mcard .ph{position:relative;overflow:hidden}
+.mcard .ph img{width:100%;height:100%;object-fit:cover;transform:scale(1.15);transition:transform 1.2s var(--ease)}
+.mcard:hover .ph img{transform:scale(1.04)}
+.mcard .tx{padding:clamp(24px,3vw,44px);display:flex;flex-direction:column;justify-content:space-between}
+.mcard .cat{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}
+.mcard h3{font-family:var(--serif);font-weight:300;font-size:clamp(34px,3.8vw,58px);line-height:.95;margin:14px 0 18px}
+.mcard h3 em{font-style:italic;color:var(--gold-soft)}
+.mcard p{color:rgba(246,237,220,.72);line-height:1.6;font-size:15px}
+.mcard ul{list-style:none;margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+.mcard li{font-size:13px;padding:7px 12px;border-radius:999px;border:1px solid rgba(246,237,220,.18);color:rgba(246,237,220,.85)}
+.mcard .no{font-family:var(--serif);font-size:90px;line-height:.8;color:transparent;-webkit-text-stroke:1px rgba(229,180,90,.35)}
+.mcard.endcard{flex-basis:min(60vw,520px);grid-template-columns:1fr;place-items:center;text-align:center;background:var(--gold);color:var(--ink)}
+.mcard.endcard h3 em{color:var(--kumkum)}
+.disc-bar{margin:clamp(24px,4vh,40px) clamp(16px,6vw,96px) 0;height:1px;background:rgba(246,237,220,.15)}
+.disc-bar i{display:block;height:100%;background:var(--gold);transform-origin:left;transform:scaleX(0)}
+@media (max-width:760px){.mcard{grid-template-columns:1fr;grid-template-rows:42% 1fr;flex-basis:84vw;height:72vh}.mcard .no{display:none}.disc-head p{display:none}}
+
+/* tasting */
+#tasting{background:var(--leaf-dk);overflow:hidden}
+#tasting .bgimg{position:absolute;inset:0;opacity:.18;background-size:cover;background-position:center;filter:saturate(.8)}
+.tast-grid{position:relative;display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(30px,5vw,80px);align-items:center}
+.tast-grid p.lead{font-size:clamp(16px,1.3vw,19px);line-height:1.6;color:rgba(246,237,220,.78);margin-top:22px;max-width:440px}
+.plate{position:relative;aspect-ratio:1;max-width:540px;width:100%;margin:0 auto}
+.plate svg.ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.plate .inner{position:absolute;inset:9%;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fbf5e6,#e5d6b5 70%,#b9a27a);box-shadow:inset 0 0 0 14px rgba(201,151,63,.35),0 40px 80px rgba(0,0,0,.45);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--ink);padding:14%}
+.plate .roman{font-family:var(--serif);font-size:clamp(60px,9vw,120px);font-weight:300;line-height:1;color:var(--kumkum)}
+.plate .name{font-family:var(--serif);font-size:clamp(24px,2.6vw,38px);line-height:1.05;margin-top:10px}
+.plate .of{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#7a6650;margin-top:14px}
+.plate .inner>*{transition:opacity .35s, transform .5s var(--ease)}
+.plate.swap .inner>*{opacity:0;transform:translateY(12px)}
+.courses{list-style:none;margin-top:30px;border-top:1px solid rgba(246,237,220,.14)}
+.courses li button{width:100%;display:flex;gap:18px;align-items:baseline;padding:12px 0;border-bottom:1px solid rgba(246,237,220,.14);text-align:left;color:rgba(246,237,220,.6);transition:color .3s, padding .4s var(--ease)}
+.courses li button b{font-family:var(--serif);font-weight:400;font-style:italic;width:34px;color:var(--gold)}
+.courses li button span{font-family:var(--serif);font-size:clamp(18px,1.6vw,22px)}
+.courses li button:hover{color:var(--cream);padding-left:8px}
+.courses li button[aria-current="true"]{color:var(--cream);padding-left:14px}
+.tast-ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px}
+@media (max-width:900px){.tast-grid{grid-template-columns:1fr}}
+
+/* leaf builder */
+#leaf{background:linear-gradient(180deg,#0e1d12,#07110a);overflow:hidden}
+.leaf-grid{display:grid;grid-template-columns:1fr 1.25fr;gap:clamp(30px,5vw,80px);align-items:center}
+.leaf-grid p.lead{font-size:clamp(16px,1.4vw,19px);line-height:1.6;color:rgba(246,237,220,.75);margin-top:24px;max-width:440px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
+.chip{padding:10px 16px;border-radius:999px;background:rgba(246,237,220,.07);border:1px solid rgba(246,237,220,.18);font-size:14px;transition:all .3s;display:inline-flex;gap:8px;align-items:center}
+.chip i{width:10px;height:10px;border-radius:50%}
+.chip:hover{border-color:var(--gold)}
+.chip[aria-pressed="true"]{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.leaf-count{margin-top:22px;font-size:14px;color:var(--gold-soft)}
+.leaf-wrap{position:relative;aspect-ratio:1.55/1;width:100%}
+.leaf-wrap svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 40px 60px rgba(0,0,0,.5))}
+.item{transform-box:fill-box;transform-origin:center;transform:scale(0);transition:transform .6s cubic-bezier(.34,1.56,.64,1)}
+.item.on{transform:scale(1)}
+@media (max-width:900px){.leaf-grid{grid-template-columns:1fr}}
+
+/* gallery */
+#space{background:var(--ink);padding-left:0;padding-right:0}
+#space .wrap{padding:0 clamp(16px,6vw,96px)}
+.gal{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px clamp(16px,6vw,96px) 30px;scrollbar-width:none;cursor:grab}
+.gal::-webkit-scrollbar{display:none}
+.gal.dragging{cursor:grabbing;scroll-snap-type:none}
+.gal figure{flex:0 0 clamp(240px,28vw,380px);scroll-snap-align:start;perspective:900px}
+.gal .frame{aspect-ratio:3/4.3;border-radius:16px;overflow:hidden;transform-style:preserve-3d;transition:transform .5s var(--ease);will-change:transform}
+.gal img{width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none}
+.gal figcaption{display:flex;justify-content:space-between;margin-top:14px;font-family:var(--serif);font-size:20px}
+.gal figcaption span{font-family:var(--sans);font-size:12px;color:var(--muted);letter-spacing:.2em}
+
+/* insta */
+#feed{background:var(--paper);color:var(--ink);text-align:center}
+#feed .label{justify-content:center;color:var(--kumkum)}
+#feed .h-xl em{color:var(--kumkum)}
+.feed-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:50px}
+.feed-grid a{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:10px}
+.feed-grid img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease)}
+.feed-grid a:hover img{transform:scale(1.07)}
+.feed-grid a::after{content:"↗";position:absolute;inset:auto 10px 10px auto;width:34px;height:34px;border-radius:50%;background:var(--cream);display:grid;place-items:center;font-size:14px;opacity:0;transform:scale(.6);transition:all .4s var(--ease)}
+.feed-grid a:hover::after{opacity:1;transform:none}
+@media (max-width:860px){.feed-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* visit */
+#visit{background:var(--ink-2);overflow:hidden}
+.visit-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(40px,6vw,90px)}
+.addr{font-family:var(--serif);font-weight:300;font-size:clamp(30px,3.6vw,52px);line-height:1.1;margin-top:10px}
+.info-rows{margin-top:40px;border-top:1px solid rgba(246,237,220,.16)}
+.info-rows div{display:flex;justify-content:space-between;gap:20px;padding:18px 0;border-bottom:1px solid rgba(246,237,220,.16);font-size:15px}
+.info-rows span:first-child{color:var(--gold-soft);letter-spacing:.14em;text-transform:uppercase;font-size:12px;padding-top:3px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:36px}
+.card{position:relative;overflow:hidden;border-radius:24px;padding:clamp(28px,3vw,44px);min-height:420px;display:flex;flex-direction:column;justify-content:flex-end}
+.card .bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.card .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,12,7,.1),rgba(18,12,7,.92) 65%)}
+.card>*:not(.bg){position:relative}
+.card h3{font-family:var(--serif);font-weight:300;font-size:clamp(32px,3.4vw,48px);line-height:1}
+.card h3 em{font-style:italic;color:var(--gold)}
+.card p{margin-top:14px;color:rgba(246,237,220,.8);line-height:1.55}
+.card form{display:flex;gap:8px;margin-top:22px;flex-wrap:wrap}
+.card input{flex:1 1 200px;padding:14px 18px;border-radius:999px;border:1px solid rgba(246,237,220,.3);background:rgba(18,12,7,.5);color:var(--cream);font:inherit;font-size:15px;outline:none}
+.card input:focus{border-color:var(--gold)}
+.card .ok{margin-top:12px;color:var(--gold-soft);font-size:14px;min-height:20px}
+@media (max-width:900px){.visit-grid{grid-template-columns:1fr}}
+
+footer{padding:70px clamp(16px,6vw,96px) 40px;background:#000;text-align:center}
+footer .flogo{width:min(520px,80vw);margin:0 auto;mix-blend-mode:lighten}
+footer .tl{font-family:var(--serif);font-style:italic;color:var(--gold-soft);font-size:22px;margin-top:18px}
+.foot-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:50px;font-size:13px;color:var(--muted);text-align:left}
+.foot-row a:hover{color:var(--gold)}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .rv,.split .w>span{opacity:1!important;transform:none!important}
+}
+</style>
+</head>
+<body>
+
+<div id="loader" aria-hidden="true">
+  <img src="{{img:0}}" alt="">
+  <div class="bar"><i id="bar"></i></div>
+  <div class="pct" id="pct">0%</div>
+</div>
+<div class="cursor" id="cursor"><span>DRAG</span></div>
+
+<nav class="top" aria-label="Main">
+  <a href="#" class="logo" aria-label="Mylapore Cafe home"><img src="{{img:0}}" alt="Mylapore South Indian Cafe"></a>
+  <ul>
+    <li><a href="#discover">Menu</a></li>
+    <li><a href="#tasting">Tasting</a></li>
+    <li><a href="#space">Our space</a></li>
+    <li><a href="#visit">Catering</a></li>
+    <li><a href="#visit">Visit</a></li>
+  </ul>
+  <a href="#visit" class="pill">Order now</a>
+</nav>
+
+<!-- ============ HERO JOURNEY ============ -->
+<section id="journey" aria-label="A walk through Mylapore">
+  <div class="stage">
+    <div class="shot" data-shot="1"><img src="{{img:6}}" alt="The Mylapore temple tank at sunset"></div>
+    <div class="shot" data-shot="2"><img src="{{img:3}}" alt="Jasmine and flower sellers on a Mylapore street"></div>
+    <div class="shot" data-shot="3"><img src="{{img:9}}" alt="A temple gopuram at dawn"></div>
+    <div class="shot" data-shot="4"><img src="{{img:10}}" alt="Filter kaapi poured from a height"></div>
+    <div class="shot arch" id="arch"><img src="{{img:2}}" alt="Looking through a temple arch at the tank at sunset"></div>
+    <div class="shade"></div>
+
+    <div class="hero-title" id="heroTitle">
+      <div class="eyebrow">Pure vegetarian · South Indian · Oshawa</div>
+      <h1>Mylapore</h1>
+      <div class="tag">Chennai, served warm.</div>
+      <div class="ta">மயிலாப்பூர்</div>
+    </div>
+    <div class="scroll-hint" id="hint">Step inside<i></i></div>
+
+    <div class="chapter" data-ch="1">
+      <div class="k">01 · The temple town</div>
+      <h2>The town of the <em>peacock</em></h2>
+      <p>Mylapore is the old heart of Chennai, a neighbourhood of temple tanks, flower sellers and kolams drawn fresh every dawn.</p>
+    </div>
+    <div class="chapter" data-ch="2">
+      <div class="k">02 · Flowers at the door</div>
+      <h2>Jasmine strung at the <em>doorway</em></h2>
+      <p>Its kitchens are known for some of the gentlest vegetarian cooking in South India.</p>
+    </div>
+    <div class="chapter" data-ch="3">
+      <div class="k">03 · Gopuram at dawn</div>
+      <h2>Batter rising <em>overnight</em></h2>
+      <p>Idli steamed soft, sambar that tastes of the pot, and chutneys ground the same morning.</p>
+    </div>
+    <div class="chapter" data-ch="4">
+      <div class="k">04 · The brass filter</div>
+      <h2>Kaapi poured from a <em>height</em></h2>
+      <p>We have carried that table to King Street East. Twenty-five seats, and one question for every guest: have you eaten?</p>
+    </div>
+
+    <div class="counter" id="counter" aria-hidden="true"><div class="big" id="cBig">01</div><div class="lbl" id="cLbl">The temple town</div></div>
+    <div class="rail" id="rail" aria-hidden="true"><b><i></i></b><b><i></i></b><b><i></i></b><b><i></i></b></div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="track" id="mq"></div></div>
+
+<!-- ============ OUR STORY ============ -->
+<section class="s" id="story">
+  <div class="wrap">
+    <div class="story-grid">
+      <div class="story-img rv"><img src="{{img:1}}" alt="A shaded Mylapore street with a flower cart" data-parallax></div>
+      <div class="story-copy">
+        <div class="label">Our story</div>
+        <h2 class="h-xl split">Have you <em>eaten?</em></h2>
+        <p class="lead rv">Jasmine strung at the doorway. Batter rising overnight. A tumbler of kaapi poured from a height.</p>
+        <div class="rv">
+          <p>Mylapore is the old heart of Chennai, a neighbourhood of temple tanks, flower sellers and kolams drawn fresh every dawn. Its name means the town of the peacock, and its kitchens are known for some of the gentlest vegetarian cooking in South India.</p>
+          <p>We have carried that table to King Street East. Idli steamed soft, sambar that tastes of the pot, chutneys ground the same morning and dosas crisp off the tawa.</p>
+        </div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat rv"><div class="n"><span data-count="25">0</span><small>seats</small></div><div class="t">On King Street East</div></div>
+      <div class="stat rv"><div class="n"><span data-count="100">0</span><small>%</small></div><div class="t">Pure vegetarian</div></div>
+      <div class="stat rv"><div class="n"><span data-count="9">0</span><small>courses</small></div><div class="t">In our tasting evening</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DISCOVER THE MENU (horizontal) ============ -->
+<section id="discover" aria-label="Discover the menu">
+  <div class="pin">
+    <div class="disc-head">
+      <div><div class="label">Discover the menu</div><h2 class="h-xl split">Cooked fresh, <em>every day.</em></h2></div>
+      <p>The everyday food of Mylapore, cooked fresh in Oshawa.</p>
+    </div>
+    <div class="htrack" id="htrack">
+      <article class="mcard">
+        <div class="ph"><img src="{{img:4}}" alt="Idli with sambar and chutneys in brass bowls"></div>
+        <div class="tx">
+          <div><div class="cat">Tiffin</div><h3>The Idli <em>Kadai</em></h3>
+          <p>Suda suda idli, Mysore tatte idli and kutti idli swimming in sambar. Soft, steaming and served the way Chennai starts its mornings, with fresh chutneys on the side.</p>
+          <ul><li>Suda suda idli</li><li>Tatte idli</li><li>Kutti idli in sambar</li></ul></div>
+          <div class="no">01</div>
+        </div>
+      </article>
+      <article class="mcard">
+        <div class="ph"><img src="{{img:5}}" alt="A crisp dosa being served off the tawa"></div>
+        <div class="tx">
+          <div><div class="cat">Dosa stage</div><h3>Crisp off the <em>tawa</em></h3>
+          <p>Sada, masala, podi and ghee roast dosas, plus the butter-rich Bangalore benne range. Each one is rolled to order and sent out while it still crackles.</p>
+          <ul><li>Sada</li><li>Masala</li><li>Podi</li><li>Ghee roast</li><li>Benne dosa</li></ul></div>
+          <div class="no">02</div>
+        </div>
+      </article>
+      <article class="mcard">
+        <div class="ph"><img src="{{img:16}}" alt="Two tumblers of filter kaapi on a banana leaf"></div>
+        <div class="tx">
+          <div><div class="cat">Kaapi & sweets</div><h3>Kaapi at <em>dusk</em></h3>
+          <p>Evenings in Mylapore end by the temple tank with something sweet and a tumbler of filter kaapi. Ours come with Tirunelveli halwa, parapu payasam and rose milk.</p>
+          <ul><li>Filter kaapi</li><li>Tirunelveli halwa</li><li>Parapu payasam</li><li>Rose milk</li></ul></div>
+          <div class="no">03</div>
+        </div>
+      </article>
+      <article class="mcard">
+        <div class="ph"><img src="{{img:11}}" alt="A golden plate on a banana leaf with chutneys"></div>
+        <div class="tx">
+          <div><div class="cat">Banana leaf</div><h3>On the <em>leaf</em></h3>
+          <p>Served the old way, on a fresh banana leaf, with chutneys, sambar and something sweet to finish.</p>
+          <ul><li>Banana leaf meals</li><li>Chutneys</li><li>Sambar</li></ul></div>
+          <div class="no">04</div>
+        </div>
+      </article>
+      <article class="mcard endcard">
+        <div><div class="cat" style="color:var(--kumkum)">Full menu</div><h3>Hungry <em>yet?</em></h3><a class="pill" style="background:var(--ink);color:var(--cream)" href="#visit">View menu &amp; order →</a></div>
+      </article>
+    </div>
+    <div class="disc-bar"><i id="discBar"></i></div>
+  </div>
+</section>
+
+<!-- ============ TASTING ============ -->
+<section class="s" id="tasting">
+  <div class="bgimg" style="background-image:url('{{img:7}}')"></div>
+  <div class="wrap tast-grid">
+    <div>
+      <div class="label">Before we open</div>
+      <h2 class="h-xl split">A seat at Mylapore's <em>table</em></h2>
+      <p class="lead rv">Nine plates of Chennai, served in order, one at a time. Join the tasting list and be among the first in Oshawa to try the menu.</p>
+      <ol class="courses rv" id="courses"></ol>
+      <div class="tast-ctas rv">
+        <button class="pill" id="nextCourse">Next course →</button>
+        <a class="pill ghost" href="#visit">Request your seat</a>
+      </div>
+    </div>
+    <div class="plate rv" id="plate">
+      <svg class="ring" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(246,237,220,.12)" stroke-width=".6"/>
+        <circle id="ringArc" cx="50" cy="50" r="48" fill="none" stroke="#e5b45a" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="301.6" style="transition:stroke-dashoffset .8s cubic-bezier(.2,.8,.2,1)"/>
+      </svg>
+      <div class="inner" aria-live="polite">
+        <div class="roman" id="pRoman">I</div>
+        <div class="name" id="pName">Mango Tango Rasam</div>
+        <div class="of" id="pOf">Course 1 of 9</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BANANA LEAF BUILDER ============ -->
+<section class="s" id="leaf">
+  <div class="wrap leaf-grid">
+    <div>
+      <div class="label">Interactive · Build your leaf</div>
+      <h2 class="h-xl split">Serve it on a <em>banana leaf.</em></h2>
+      <p class="lead rv">Pick your favourites and watch them land on the leaf, just as they would be served at a Mylapore feast.</p>
+      <div class="chips" id="chips"></div>
+      <div class="leaf-count" id="leafCount">Your leaf is empty. Tap a dish to start.</div>
+    </div>
+    <div class="leaf-wrap rv">
+      <svg viewBox="0 0 620 400" role="img" aria-label="A banana leaf with the dishes you picked">
+        <defs>
+          <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6fae5e"/><stop offset=".55" stop-color="#3d8443"/><stop offset="1" stop-color="#245a2d"/></linearGradient>
+          <radialGradient id="steel" cx=".4" cy=".35"><stop offset="0" stop-color="#f6e2a8"/><stop offset=".7" stop-color="#c9973f"/><stop offset="1" stop-color="#8a6420"/></radialGradient>
+        </defs>
+        <path d="M20 210 C 60 60, 300 20, 600 70 C 610 160, 600 260, 590 340 C 380 390, 130 370, 20 210 Z" fill="url(#lg)"/>
+        <path d="M24 210 C 220 190, 420 170, 596 120" stroke="#cfe5b8" stroke-width="3" fill="none" opacity=".7"/>
+        <g stroke="#bcd9a3" stroke-width="1" opacity=".35" fill="none" id="veins"></g>
+        <g id="items"></g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OUR SPACE ============ -->
+<section class="s" id="space">
+  <div class="wrap">
+    <div class="label">Our space</div>
+    <h2 class="h-xl split" style="margin-bottom:50px">Where the temple town <em>lives on</em></h2>
+  </div>
+  <div class="gal" id="gal">
+    <figure><div class="frame"><img src="{{img:3}}" alt="Flowers at the door"></div><figcaption>Flowers at the door <span>01</span></figcaption></figure>
+    <figure><div class="frame"><img src="{{img:9}}" alt="Gopuram at dawn"></div><figcaption>Gopuram at dawn <span>02</span></figcaption></figure>
+    <figure><div class="frame"><img src="{{img:10}}" alt="The brass filter"></div><figcaption>The brass filter <span>03</span></figcaption></figure>
+    <figure><div class="frame"><img src="{{img:11}}" alt="On the leaf"></div><figcaption>On the leaf <span>04</span></figcaption></figure>
+    <figure><div class="frame"><img src="{{img:12}}" alt="Mylapore"></div><figcaption>Mylapore <span>05</span></figcaption></figure>
+    <figure><div class="frame"><img src="{{img:15}}" alt="To Oshawa"></div><figcaption>To Oshawa <span>06</span></figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ FEED ============ -->
+<section class="s" id="feed">
+  <div class="wrap">
+    <div class="label">Fresh from our kitchen, straight to your feed</div>
+    <h2 class="h-xl split">@mylapore<em>_cafe</em></h2>
+    <div class="feed-grid">
+      <a href="https://www.instagram.com/mylapore_cafe/" target="_blank" rel="noopener" class="rv"><img src="{{img:14}}" alt="Mylapore Cafe on Instagram: kolam"></a>
+      <a href="https://www.instagram.com/mylapore_cafe/" target="_blank" rel="noopener" class="rv"><img src="{{img:13}}" alt="Mylapore Cafe on Instagram: a letter from across the ocean"></a>
+      <a href="https://www.instagram.com/mylapore_cafe/" target="_blank" rel="noopener" class="rv"><img src="{{img:7}}" alt="Mylapore Cafe on Instagram: the flavours of Mylapore"></a>
+      <a href="https://www.instagram.com/mylapore_cafe/" target="_blank" rel="noopener" class="rv"><img src="{{img:16}}" alt="Mylapore Cafe on Instagram: filter kaapi"></a>
+      <a href="https://www.instagram.com/mylapore_cafe/" target="_blank" rel="noopener" class="rv"><img src="{{img:12}}" alt="Mylapore Cafe on Instagram: Mylapore"></a>
+      <a href="https://www.instagram.com/mylapore_cafe/" target="_blank" rel="noopener" class="rv"><img src="{{img:15}}" alt="Mylapore Cafe on Instagram: Oshawa"></a>
+    </div>
+    <div style="margin-top:40px"><a class="pill" style="background:var(--ink);color:var(--cream)" href="https://www.instagram.com/mylapore_cafe/" target="_blank" rel="noopener">Follow us ↗</a></div>
+  </div>
+</section>
+
+<!-- ============ VISIT ============ -->
+<section class="s" id="visit">
+  <div class="wrap visit-grid">
+    <div>
+      <div class="label">Visit · Order · Celebrate</div>
+      <h2 class="h-xl split">Come <em>hungry.</em></h2>
+      <p class="addr rv">77 King Street East, Unit 2<br>Oshawa, Ontario</p>
+      <div class="info-rows rv">
+        <div><span>Hours</span><span>Coming soon</span></div>
+        <div><span>Seats</span><span>25, reservations recommended</span></div>
+        <div><span>Catering</span><span>Weddings, poojas, office lunches</span></div>
+        <div><span>Gift cards</span><span>Ask in store</span></div>
+      </div>
+      <div class="ctas rv">
+        <a class="pill" href="#">Order online</a>
+        <a class="pill ghost" href="#">Reserve a table</a>
+        <a class="pill ghost" href="https://www.google.com/maps/search/?api=1&query=77+King+Street+East+Unit+2+Oshawa+ON" target="_blank" rel="noopener">View on Google Maps ↗</a>
+      </div>
+    </div>
+    <div class="card rv">
+      <div class="bg" style="background-image:url('{{img:13}}')"></div>
+      <h3>Join the <em>Peacock Circle</em></h3>
+      <p>Opening news, early tastings and first looks at the menu.</p>
+      <form id="circle">
+        <label for="em" style="position:absolute;left:-9999px">Email</label>
+        <input id="em" type="email" placeholder="you@email.com" required>
+        <button class="pill" type="submit">Join</button>
+      </form>
+      <div class="ok" id="ok" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <img class="flogo" src="{{img:0}}" alt="Mylapore South Indian Cafe">
+  <div class="tl">Pure vegetarian South Indian food from the temple town of Mylapore, cooked fresh in Oshawa.</div>
+  <div class="foot-row">
+    <span>© 2026 Mylapore Cafe</span>
+    <span><a href="#discover">Menu</a> · <a href="#visit">Catering</a> · <a href="#visit">Gift cards</a> · <a href="#tasting">Tasting</a> · <a href="#visit">Contact</a></span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(() => {
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v,a=0,b=1) => Math.max(a, Math.min(b, v));
+const lerp = (a,b,t) => a + (b-a)*t;
+const ease = t => 1 - Math.pow(1-t, 3);
+const seg = (p,a,b) => clamp((p-a)/(b-a));
+
+/* preloader: waits for images */
+const pct = document.getElementById('pct'), bar = document.getElementById('bar'), loader = document.getElementById('loader');
+const imgs = [...document.images]; let done = 0;
+const tick = () => { done++; const v = Math.round(done/imgs.length*100); pct.textContent = v + '%'; bar.style.width = v + '%'; if (done >= imgs.length) setTimeout(() => loader.classList.add('done'), 400); };
+imgs.forEach(i => i.complete ? tick() : (i.addEventListener('load', tick), i.addEventListener('error', tick)));
+setTimeout(() => loader.classList.add('done'), 5000);
+
+/* smooth scroll */
+let lenis = null;
+if (!reduce && window.Lenis) { lenis = new Lenis({ lerp: .09 }); const raf = t => { lenis.raf(t); requestAnimationFrame(raf); }; requestAnimationFrame(raf); }
+document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+  const id = a.getAttribute('href'); if (id.length < 2) return; const el = document.querySelector(id); if (!el) return;
+  e.preventDefault(); lenis ? lenis.scrollTo(el, { offset: 0 }) : el.scrollIntoView({ behavior: 'smooth' });
+}));
+
+/* cursor */
+const cur = document.getElementById('cursor');
+let cx = innerWidth/2, cy = innerHeight/2, tx = cx, ty = cy;
+addEventListener('pointermove', e => { tx = e.clientX; ty = e.clientY; });
+(function mv(){ cx += (tx-cx)*.2; cy += (ty-cy)*.2; cur.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`; requestAnimationFrame(mv); })();
+document.addEventListener('pointerover', e => { const g = e.target.closest('.gal'); cur.classList.toggle('drag', !!g); cur.classList.toggle('big', !g && !!e.target.closest('a,button,.mcard')); });
+
+/* ---------- hero journey ---------- */
+const journey = document.getElementById('journey');
+const arch = document.getElementById('arch');
+const shots = [...document.querySelectorAll('.shot[data-shot]')];
+const chapters = [...document.querySelectorAll('.chapter')];
+const heroTitle = document.getElementById('heroTitle'), hint = document.getElementById('hint');
+const counter = document.getElementById('counter'), rail = document.getElementById('rail');
+const rails = [...rail.querySelectorAll('i')];
+const cBig = document.getElementById('cBig'), cLbl = document.getElementById('cLbl');
+const labels = ['The temple town','Flowers at the door','Gopuram at dawn','The brass filter'];
+
+/* other scroll-linked bits */
+const disc = document.getElementById('discover'), htrack = document.getElementById('htrack'), discBar = document.getElementById('discBar');
+const para = [...document.querySelectorAll('[data-parallax]')];
+
+const prog = el => { const r = el.getBoundingClientRect(); return clamp(-r.top / (r.height - innerHeight)); };
+let pJ = 0, sJ = 0, pD = 0, sD = 0;
+function read(){ pJ = prog(journey); pD = prog(disc); }
+addEventListener('scroll', read, { passive: true }); addEventListener('resize', read); read();
+
+function frame(){
+  const k = reduce ? 1 : .1;
+  sJ += (pJ - sJ) * k; sD += (pD - sD) * k;
+  const p = sJ;
+
+  // 1) fly through the arch: 0 -> .2
+  const a = seg(p, 0, .2);
+  arch.style.transform = `scale(${1 + ease(a)*1.15})`;
+  arch.style.opacity = 1 - seg(p, .13, .2);
+  heroTitle.style.opacity = 1 - seg(p, 0, .07);
+  heroTitle.style.transform = `translateY(${-seg(p,0,.07)*80}px)`;
+  hint.style.opacity = 1 - seg(p, 0, .03);
+
+  // 2) chapters .16 -> 1
+  const cp = seg(p, .16, 1) * 4, idx = Math.min(3, Math.floor(cp)), local = cp - idx;
+  shots.forEach((s, i) => {
+    let o = 0;
+    if (i === idx) o = 1;
+    if (i === idx + 1 && local > .82) o = (local - .82) / .18;
+    if (i === 0 && p < .16) o = seg(p, .1, .16);
+    const own = clamp(cp - i + (i===0 ? .25 : 0));          // per-shot ken burns
+    s.style.opacity = o;
+    s.style.transform = `scale(${1.18 - own*.14}) translateY(${(own-.5)*-3}%)`;
+    s.style.zIndex = i === idx + 1 ? 2 : 1;
+  });
+  chapters.forEach((c, i) => {
+    let o = 0;
+    if (i === idx && p > .18) o = local < .18 ? local/.18 : local > .8 ? (1 - local)/.2 : 1;
+    if (i === 3 && idx === 3 && local > .8) o = 1;
+    o = clamp(o);
+    c.style.opacity = o; c.style.transform = `translateY(${(1-o)*36}px)`;
+  });
+  const ui = seg(p, .16, .22);
+  counter.style.opacity = ui; rail.style.opacity = ui;
+  rails.forEach((r, i) => r.style.transform = `scaleX(${clamp(cp - i)})`);
+  const n = String(idx+1).padStart(2,'0'); if (cBig.textContent !== n) { cBig.textContent = n; cLbl.textContent = labels[idx]; }
+
+  // horizontal menu
+  const max = htrack.scrollWidth - innerWidth;
+  htrack.style.transform = `translateX(${-sD * max}px)`;
+  discBar.style.transform = `scaleX(${sD})`;
+
+  // parallax
+  para.forEach(img => { const r = img.parentElement.getBoundingClientRect(); const t = clamp((innerHeight - r.top) / (innerHeight + r.height)); img.style.transform = `translateY(${-t*16}%)`; });
+
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* marquee */
+const mqItems = ['Mylapore','Idli Kadai','Dosa Stage','Filter Kaapi','Banana Leaf','Pure Vegetarian'];
+const mqHTML = mqItems.map(t => `<span>${t} ✦</span>`).join('');
+document.getElementById('mq').innerHTML = mqHTML + mqHTML + mqHTML;
+
+/* split text */
+document.querySelectorAll('.split').forEach(el => {
+  const walk = node => [...node.childNodes].forEach(ch => {
+    if (ch.nodeType === 3) { const frag = document.createDocumentFragment(); ch.textContent.split(/(\s+)/).forEach(w => { if (!w) return; if (/^\s+$/.test(w)) { frag.appendChild(document.createTextNode(w)); return; } const o = document.createElement('span'); o.className = 'w'; const i = document.createElement('span'); i.textContent = w; o.appendChild(i); frag.appendChild(o); }); ch.replaceWith(frag); }
+    else if (ch.nodeType === 1) walk(ch);
+  });
+  walk(el); el.querySelectorAll('.w>span').forEach((s,i) => s.style.transitionDelay = (i*60) + 'ms');
+});
+
+/* reveals + counters */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return; e.target.classList.add('in'); io.unobserve(e.target);
+  e.target.querySelectorAll('[data-count]').forEach(countUp);
+}), { threshold: .15 });
+document.querySelectorAll('.rv,.split').forEach(el => io.observe(el));
+document.querySelectorAll('.feed-grid a').forEach((a,i) => a.style.transitionDelay = (i*70)+'ms');
+function countUp(el){ const to = +el.dataset.count, t0 = performance.now(); const step = t => { const k = clamp((t-t0)/1600); el.textContent = Math.round(to*ease(k)); if (k<1) requestAnimationFrame(step); }; requestAnimationFrame(step); }
+
+/* ---------- nine-course tasting ---------- */
+const COURSES = ['Mango Tango Rasam','Jackfruit Aloo Puri Taco','Curd Rice Arancini','Milagaipodi Idli Fries','Ghee Sambar Vada','Benne Cheesy Pesto','Guti Vankaya Kaju Pulao','Strawberry Madness','Filter Kapi'];
+const ROMAN = ['I','II','III','IV','V','VI','VII','VIII','IX'];
+const list = document.getElementById('courses'), plate = document.getElementById('plate'), arc = document.getElementById('ringArc');
+const pRoman = document.getElementById('pRoman'), pName = document.getElementById('pName'), pOf = document.getElementById('pOf');
+let course = 0;
+COURSES.forEach((c,i) => { const li = document.createElement('li'); li.innerHTML = `<button><b>${ROMAN[i]}</b><span>${c}</span></button>`; li.firstChild.onclick = () => setCourse(i); list.appendChild(li); });
+function setCourse(i){
+  course = i; plate.classList.add('swap');
+  setTimeout(() => { pRoman.textContent = ROMAN[i]; pName.textContent = COURSES[i]; pOf.textContent = `Course ${i+1} of 9`; plate.classList.remove('swap'); }, 300);
+  arc.style.strokeDashoffset = 301.6 * (1 - (i+1)/9);
+  [...list.children].forEach((li,j) => li.firstChild.setAttribute('aria-current', j === i));
+}
+document.getElementById('nextCourse').onclick = () => setCourse((course + 1) % 9);
+setCourse(0);
+
+/* ---------- banana leaf builder ---------- */
+const NS = 'http://www.w3.org/2000/svg';
+const veins = document.getElementById('veins');
+for (let i=0;i<16;i++){ const x = 60 + i*34; const p = document.createElementNS(NS,'path'); p.setAttribute('d', `M${x} ${205 - i*5} Q ${x+20} ${120 - i*4} ${x+40} ${60 + i*0.5}`); veins.appendChild(p); const q = p.cloneNode(); q.setAttribute('d', `M${x} ${205 - i*5} Q ${x+20} ${290 - i*2} ${x+30} ${360 - i*1.5}`); veins.appendChild(q); }
+function el(tag, attrs, parent){ const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; }
+function blob(g,x,y,rx,ry,c1,c2,grain){ el('ellipse',{cx:x,cy:y+4,rx,ry,fill:'rgba(0,0,0,.18)'},g); el('ellipse',{cx:x,cy:y,rx,ry,fill:c1},g); for (let i=0;i<(grain?40:14);i++){ const a=Math.random()*6.28, r=Math.random(); el('ellipse',{cx:x+Math.cos(a)*rx*r*.85, cy:y+Math.sin(a)*ry*r*.85, rx:grain?3:2.4, ry:grain?1.4:2.4, fill:c2},g); } }
+function bowl(g,x,y,c){ el('ellipse',{cx:x,cy:y+6,rx:34,ry:12,fill:'rgba(0,0,0,.25)'},g); el('ellipse',{cx:x,cy:y,rx:34,ry:22,fill:'url(#steel)'},g); el('ellipse',{cx:x,cy:y-3,rx:27,ry:15,fill:c},g); el('ellipse',{cx:x-8,cy:y-7,rx:8,ry:3,fill:'rgba(255,255,255,.3)'},g); }
+function idli(g,x,y){ [[0,0],[34,6],[17,-22]].forEach(([dx,dy]) => { el('ellipse',{cx:x+dx,cy:y+dy+5,rx:22,ry:12,fill:'rgba(0,0,0,.18)'},g); el('ellipse',{cx:x+dx,cy:y+dy,rx:22,ry:14,fill:'#fbf8ef'},g); el('ellipse',{cx:x+dx-5,cy:y+dy-4,rx:9,ry:4,fill:'#ffffff'},g); }); }
+function dosa(g,x,y){ el('path',{d:`M${x-80} ${y+10} Q ${x} ${y-40} ${x+90} ${y-4} L ${x+80} ${y+18} Q ${x} ${y+30} ${x-80} ${y+10} Z`,fill:'rgba(0,0,0,.2)',transform:'translate(0,6)'},g); el('path',{d:`M${x-80} ${y+10} Q ${x} ${y-40} ${x+90} ${y-4} L ${x+80} ${y+18} Q ${x} ${y+30} ${x-80} ${y+10} Z`,fill:'#d99a3e'},g); el('path',{d:`M${x-70} ${y+6} Q ${x} ${y-28} ${x+80} ${y-2}`,stroke:'#f0c06c',fill:'none','stroke-width':3},g); }
+function vada(g,x,y){ el('circle',{cx:x,cy:y+4,r:26,fill:'rgba(0,0,0,.2)'},g); el('circle',{cx:x,cy:y,r:26,fill:'#a9621f'},g); el('circle',{cx:x,cy:y,r:22,fill:'#c98236'},g); el('circle',{cx:x,cy:y,r:7,fill:'#3d8443'},g); }
+const LEAF = [
+  { n:'Idli',         c:'#fbf8ef', draw: g => idli(g, 280, 250) },
+  { n:'Masala dosa',  c:'#d99a3e', draw: g => dosa(g, 300, 140) },
+  { n:'Sambar',       c:'#c8741f', draw: g => bowl(g, 430, 255, '#c8741f') },
+  { n:'Coconut chutney', c:'#eef0e0', draw: g => bowl(g, 520, 215, '#eef0dc') },
+  { n:'Tomato chutney',  c:'#b3261e', draw: g => bowl(g, 510, 300, '#b5381f') },
+  { n:'Medu vada',    c:'#a9621f', draw: g => vada(g, 140, 250) },
+  { n:'Podi',         c:'#9b3b16', draw: g => blob(g, 175, 175, 20, 13, '#a8461c', '#6b2208', true) },
+  { n:'Payasam',      c:'#e8c48a', draw: g => bowl(g, 420, 110, '#e3bd84') },
+  { n:'Halwa',        c:'#c2501f', draw: g => blob(g, 95, 200, 16, 11, '#c55a22', '#8a3110') },
+];
+const itemsG = document.getElementById('items'), chips = document.getElementById('chips'), countEl = document.getElementById('leafCount');
+LEAF.forEach(it => {
+  const g = el('g',{class:'item'}, itemsG); it.draw(g);
+  const b = document.createElement('button'); b.className = 'chip'; b.setAttribute('aria-pressed','false'); b.innerHTML = `<i style="background:${it.c}"></i>${it.n}`;
+  b.onclick = () => { const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', on); g.classList.toggle('on', on); upd(); };
+  chips.appendChild(b);
+});
+function upd(){ const on = [...chips.children].filter(c => c.getAttribute('aria-pressed') === 'true').length; countEl.textContent = on === 0 ? 'Your leaf is empty. Tap a dish to start.' : on === LEAF.length ? 'A full leaf. Have you eaten? Yes, very well.' : `${on} of ${LEAF.length} on your leaf. Keep going.`; }
+
+/* ---------- drag gallery with tilt ---------- */
+const gal = document.getElementById('gal');
+let down = false, sx = 0, sl = 0, moved = false;
+gal.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; down = true; moved = false; sx = e.clientX; sl = gal.scrollLeft; gal.classList.add('dragging'); });
+addEventListener('pointerup', () => { down = false; gal.classList.remove('dragging'); });
+gal.addEventListener('pointermove', e => {
+  if (down) { const dx = e.clientX - sx; if (Math.abs(dx) > 3) moved = true; gal.scrollLeft = sl - dx; }
+  const f = e.target.closest('.frame'); if (!f || reduce) return;
+  const r = f.getBoundingClientRect(), x = (e.clientX - r.left)/r.width - .5, y = (e.clientY - r.top)/r.height - .5;
+  f.style.transform = `rotateY(${x*12}deg) rotateX(${-y*12}deg) scale(1.02)`;
+});
+gal.querySelectorAll('.frame').forEach(f => f.addEventListener('pointerleave', () => f.style.transform = ''));
+
+/* newsletter */
+document.getElementById('circle').addEventListener('submit', e => { e.preventDefault(); document.getElementById('ok').textContent = 'Welcome to the Peacock Circle. We\'ll be in touch soon.'; e.target.reset(); });
+})();
+</script>
+</body>
+</html>
